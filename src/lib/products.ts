@@ -2,6 +2,7 @@ export interface Product {
   id: string;
   name: string;
   price: number;
+  salePrice?: number;
   description: string;
   category: string;
   image: string;
@@ -13,6 +14,7 @@ export const products: Product[] = [
     id: "1",
     name: "CyberPunk Headset X1",
     price: 299.99,
+    salePrice: 249.99,
     description: "Immersive audio with neon accents and active noise cancellation. Perfect for the digital nomad.",
     category: "Tech",
     image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500&q=80",
@@ -40,6 +42,7 @@ export const products: Product[] = [
     id: "4",
     name: "Holo-Watch V2",
     price: 349.00,
+    salePrice: 299.00,
     description: "Smartwatch with holographic display interface and biometric tracking.",
     category: "Tech",
     image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500&q=80",
@@ -58,6 +61,7 @@ export const products: Product[] = [
     id: "6",
     name: "Drone Cam Pro",
     price: 899.00,
+    salePrice: 799.00,
     description: "4K autonomous drone with follow-me mode and obstacle avoidance.",
     category: "Tech",
     image: "https://images.unsplash.com/photo-1473968512647-3e447244af8f?w=500&q=80",

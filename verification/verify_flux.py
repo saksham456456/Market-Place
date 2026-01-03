@@ -9,54 +9,60 @@ def verify_flux():
             print("Navigating to Home Page...")
             page.goto("http://localhost:3000")
             page.wait_for_selector("text=FUTURE MARKET")
-            page.screenshot(path="verification/1_home.png")
             print("Home Page Verified")
 
-            # 2. Add to Cart (Navigate to first product)
-            print("Navigating to Product Page...")
-            page.click("text=CyberPunk Headset X1")
-            page.wait_for_selector("text=Add to Cart")
-            page.screenshot(path="verification/2_product.png")
+            # 2. Categories Page
+            print("Navigating to Categories...")
+            page.click("text=Categories")
+            page.wait_for_selector("text=BROWSE BY CATEGORY")
+            page.wait_for_selector("text=Tech")
+            page.wait_for_selector("text=Fashion")
+            page.screenshot(path="verification/6_categories.png")
+            print("Categories Page Verified")
 
-            # Click Add to Cart
-            page.click("text=Add to Cart")
-            page.wait_for_selector("text=Added to Cart")
-            print("Product Added to Cart")
+            # 3. Deals Page
+            print("Navigating to Deals...")
+            page.click("text=Deals")
+            page.wait_for_selector("text=FLASH DEALS")
+            # Check for discount badge
+            page.wait_for_selector("text=%")
+            page.screenshot(path="verification/7_deals.png")
+            print("Deals Page Verified")
 
-            # 3. Cart Page
-            print("Navigating to Cart...")
-            page.click("a[href='/cart']")
-            page.wait_for_selector("text=Shopping Cart")
-            page.screenshot(path="verification/3_cart.png")
-            print("Cart Verified")
+            # 4. Search
+            print("Testing Search...")
+            # Click Logo to go home (it's a link, not a button)
+            page.click("a:has-text('FLUX')")
+            page.wait_for_selector("text=FUTURE MARKET")
 
-            # 4. Checkout
-            print("Navigating to Checkout...")
-            page.click("text=Proceed to Checkout")
-            page.wait_for_selector("text=Shipping Information")
-            page.screenshot(path="verification/4_checkout.png")
+            # Click search icon
+            page.click(".lucide-search")
+            # Type in search box
+            page.fill("input[placeholder='Search...']", "Hoodie")
+            page.press("input[placeholder='Search...']", "Enter")
 
-            # Fill form
-            page.fill("input[placeholder='First Name']", "John")
-            page.fill("input[placeholder='Last Name']", "Doe")
-            page.fill("input[placeholder='Address']", "123 Cyber Lane")
-            page.fill("input[placeholder='City']", "Neo Tokyo")
-            page.fill("input[placeholder='ZIP Code']", "90210")
-            page.fill("input[placeholder='Card Number']", "4242424242424242")
-            page.fill("input[placeholder='MM/YY']", "12/25")
-            page.fill("input[placeholder='CVC']", "123")
+            page.wait_for_selector("text=Search Results for")
+            page.wait_for_selector("text=Neon Flux Hoodie")
+            page.screenshot(path="verification/8_search_results.png")
+            print("Search Verified")
 
-            # Submit
-            print("Submitting Order...")
-            page.click("button:has-text('Pay')")
+            # 5. Login & Profile
+            print("Testing Login Flow...")
+            page.click("a[href='/login']")
+            page.wait_for_selector("text=Welcome Back")
+            page.fill("input[type='email']", "test@test.com")
+            page.fill("input[type='password']", "password")
+            page.click("button:has-text('Login')")
 
-            # 5. Tracking
-            page.wait_for_selector("text=Order Confirmed!")
-            page.screenshot(path="verification/5_tracking.png")
-            print("Order Tracking Verified")
+            page.wait_for_selector("text=Order History")
+            page.wait_for_selector("text=Cyber Nomad") # Default mock name
+            page.screenshot(path="verification/9_profile.png")
+            print("Login & Profile Verified")
 
         except Exception as e:
             print(f"Error: {e}")
+            page.screenshot(path="verification/error.png")
+            raise e
         finally:
             browser.close()
 

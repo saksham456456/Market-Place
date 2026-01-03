@@ -1,14 +1,26 @@
 "use client";
 
 import Link from "next/link";
-import { ShoppingCart, Search, Menu, X } from "lucide-react";
+import { ShoppingCart, Search, Menu, X, User } from "lucide-react";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { useCart } from "@/context/CartContext";
 import { Button } from "./ui/Button";
 
 export function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [showSearch, setShowSearch] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
   const { itemCount } = useCart();
+  const router = useRouter();
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      router.push(`/search?q=${encodeURIComponent(searchQuery)}`);
+      setShowSearch(false);
+    }
+  };
 
   return (
     <nav className="sticky top-0 z-50 w-full border-b border-white/10 bg-black/50 backdrop-blur-xl">
@@ -38,10 +50,33 @@ export function Navbar() {
         </div>
 
         {/* Actions */}
-        <div className="flex items-center gap-4">
-          <button className="p-2 hover:bg-white/10 rounded-full transition-colors">
-            <Search className="w-5 h-5" />
-          </button>
+        <div className="flex items-center gap-2">
+          {showSearch ? (
+            <form onSubmit={handleSearch} className="relative mr-2">
+                <input
+                    autoFocus
+                    type="text"
+                    placeholder="Search..."
+                    className="bg-white/10 border border-white/20 rounded-full py-1 px-4 text-sm w-48 focus:outline-none focus:border-primary"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    onBlur={() => !searchQuery && setShowSearch(false)}
+                />
+            </form>
+          ) : (
+            <button
+                className="p-2 hover:bg-white/10 rounded-full transition-colors"
+                onClick={() => setShowSearch(true)}
+            >
+                <Search className="w-5 h-5" />
+            </button>
+          )}
+
+          <Link href="/login">
+            <Button variant="ghost" className="p-2">
+                <User className="w-5 h-5" />
+            </Button>
+          </Link>
 
           <Link href="/cart">
             <Button variant="ghost" className="relative p-2">
